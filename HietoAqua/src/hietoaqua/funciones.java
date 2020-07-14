@@ -5,17 +5,10 @@
  */
 package hietoaqua;
 
-/**
- *
- * @author Ricardo
- */
-public class HietoAqua {
+import javax.swing.JButton;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class funciones {
+    public void botonsito(){
+        JButton boton = new JButton();
     }
-    
 }
