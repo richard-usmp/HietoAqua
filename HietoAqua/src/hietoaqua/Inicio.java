@@ -47,7 +47,7 @@ public class Inicio extends javax.swing.JFrame {
         jLabel2.setText("Intervalo de horas:");
 
         cmbHoras1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cmbHoras1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" }));
+        cmbHoras1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00" }));
         cmbHoras1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbHoras1ActionPerformed(evt);
@@ -55,7 +55,7 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         cmbHoras2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cmbHoras2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00" }));
+        cmbHoras2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00" }));
 
         jLabel3.setText("a");
 
@@ -94,8 +94,8 @@ public class Inicio extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(dateChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(115, 115, 115)
+                                .addComponent(dateChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cmbHoras1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -143,9 +143,13 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Calendario incompleto");
         }else{
             ap.lblMed_Precipi_recibi.setText(medida);
-            f.setHoraRecib1(horas1);
-            f.setHoraRecib2(horas2);
-            System.out.println(horas1 +" ///" +horas2);
+            System.out.println("llega");
+            String horas1_S = horas1 +"";
+            String horas2_S = horas2 +"";
+            ap.txtHora_recib1.setText(horas1_S);
+            ap.txtHoras.setText(horas1_S+":00");
+            ap.txtHora_recib2.setText(horas2_S);
+            //System.out.println(horas1 +" ///" +horas2);
             ap.setVisible(true);
             this.dispose();
         }

@@ -13,17 +13,19 @@ import javax.swing.JOptionPane;
 
 public class Agregar_precipitaciones extends javax.swing.JFrame {
     ArrayList<Double> listaPrecipitaciones = new ArrayList<>();
+    String hora1_S,hora2_S;
+    //int hora_c = 1;
+    
     /**
      * Creates new form Agregar_precipitaciones
      */
     public Agregar_precipitaciones() {
         initComponents();
-        txtHoras.setText(horaRecib1+"");
+        txtHora_recib1.setVisible(false);
+        txtHora_recib2.setVisible(false);             
     }
     Inicio inicio = new Inicio();
     funciones f = new funciones();
-    int horaRecib1=f.getHoraRecib1();
-    int horaRecib2=f.getHoraRecib2();
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,6 +44,12 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         lblMed_Precipi_recibi = new javax.swing.JLabel();
+        txtHora_recib1 = new javax.swing.JTextField();
+        txtHora_recib2 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,38 +80,106 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Agregar valores de precipitaciones:");
 
+        txtHora_recib1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtHora_recib1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHora_recib1ActionPerformed(evt);
+            }
+        });
+        txtHora_recib1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHora_recib1KeyTyped(evt);
+            }
+        });
+
+        txtHora_recib2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtHora_recib2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHora_recib2KeyTyped(evt);
+            }
+        });
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setText("Calcular");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("Acumulado por horas");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "1 Hora  ", "2 Horas", "3 Horas", "6 Horas"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                                .addComponent(txtHora_recib1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtMed_Precipi, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblMed_Precipi_recibi, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1))))
-                    .addComponent(jLabel4))
-                .addContainerGap(112, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel1))
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtMed_Precipi, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblMed_Precipi_recibi, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton1))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(168, 168, 168))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(163, 163, 163)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(txtHora_recib1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
@@ -114,6 +190,14 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                     .addComponent(txtMed_Precipi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(lblMed_Precipi_recibi, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(96, Short.MAX_VALUE))
         );
 
@@ -124,9 +208,22 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
         String valor = txtMed_Precipi.getText();
         double valorDec = Double.parseDouble(valor);
         listaPrecipitaciones.add(valorDec);
-        txtMed_Precipi.setText(" ");
-        System.out.println(horaRecib1);
-        System.out.println(horaRecib2);
+        hora1_S = txtHora_recib1.getText();
+        hora2_S = txtHora_recib2.getText(); 
+        int hora1 = Integer.parseInt(hora1_S);
+        int hora2 = Integer.parseInt(hora2_S);       
+        if(hora1<=hora2){
+            hora1++;
+            txtHoras.setText(" ");
+            //hora_c= hora1 +1;
+            txtHoras.setText(hora1 + ":00");          
+            System.out.println("hora1 contador: "+hora1);
+        }else{
+            JOptionPane.showMessageDialog(null,"Ya no hay más horas");
+        }
+        txtHora_recib1.setText(hora1 + "");
+        txtMed_Precipi.setText("");     
+        //System.out.print(hora1 +"////"+hora2);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtMed_PrecipiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMed_PrecipiKeyTyped
@@ -138,6 +235,18 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Solo numeros");
         }
     }//GEN-LAST:event_txtMed_PrecipiKeyTyped
+
+    private void txtHora_recib1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHora_recib1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHora_recib1KeyTyped
+
+    private void txtHora_recib2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHora_recib2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHora_recib2KeyTyped
+
+    private void txtHora_recib1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHora_recib1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHora_recib1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,11 +285,17 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     public static javax.swing.JLabel lblMed_Precipi_recibi;
+    public static javax.swing.JTextField txtHora_recib1;
+    public static javax.swing.JTextField txtHora_recib2;
     public javax.swing.JTextField txtHoras;
     private javax.swing.JTextField txtMed_Precipi;
     // End of variables declaration//GEN-END:variables
