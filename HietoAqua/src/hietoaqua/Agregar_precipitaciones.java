@@ -9,6 +9,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 
 public class Agregar_precipitaciones extends javax.swing.JFrame {
@@ -57,12 +62,13 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_maximos = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         txtHoras.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
 
-        jLabel1.setText("==>");
+        jLabel1.setText("--→");
 
         txtMed_Precipi.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         txtMed_Precipi.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -125,6 +131,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
 
             }
         ));
+        tblAcumulado.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblAcumulado);
 
         txtHora_recib1_0.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
@@ -170,10 +177,18 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
             tbl_maximos.getColumnModel().getColumn(0).setPreferredWidth(140);
         }
 
-        jButton3.setText("Atrás");
+        jButton3.setText("← Atrás");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton4.setText("Gráfico →");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -187,8 +202,23 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2)
+                            .addComponent(jLabel5))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtHora_recib2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
@@ -210,25 +240,12 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton1)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtHora_recib1_0, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(txtHora_recib1_0, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,13 +273,16 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(txtHora_recib1_0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
-                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jButton3)))
+                .addGap(3, 3, 3)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel5)
@@ -270,6 +290,8 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -329,7 +351,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
             double profundidad_maxima2 = Math.round(((listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1))*100)/100);
             double profundidad_maxima3 = 0;
-            double profundidad_maxima4 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2) + listaPrecipitaciones.get(3);           
+            double profundidad_maxima4 = 0;           
             hora1_S = txtHora_recib1_0.getText();
             hora2_S = txtHora_recib2_0.getText(); 
             int hora1 = Integer.parseInt(hora1_S);
@@ -411,6 +433,8 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row5);
                         break;
                     case 4:
+                        profundidad_maxima4 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2) + listaPrecipitaciones.get(3)+ 
+                                listaPrecipitaciones.get(4)+ listaPrecipitaciones.get(5);
                         tblPre.addColumn("Total en 6 horas");
                         Object row6[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
@@ -940,9 +964,9 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                 }               
             }     
             double maximo_intensidad1 = profundidad_maxima1/1.0;
-            double maximo_intensidad2 = profundidad_maxima1/2.0;
-            double maximo_intensidad3 = profundidad_maxima1/3.0;
-            double maximo_intensidad4 = profundidad_maxima1/6.0;
+            double maximo_intensidad2 = profundidad_maxima2/2.0;
+            double maximo_intensidad3 = profundidad_maxima3/3.0;
+            double maximo_intensidad4 = profundidad_maxima4/6.0;
             Object rrooww1[] = {"Profundidad Máxima", df.format(profundidad_maxima1), df.format(profundidad_maxima2), df.format(profundidad_maxima3), df.format(profundidad_maxima4)};
             Object rrooww2[]={"Maximo intensidad", df.format(maximo_intensidad1), df.format(maximo_intensidad2), df.format(maximo_intensidad3), df.format(maximo_intensidad4)};
             tblPre2.addRow(rrooww1);
@@ -964,7 +988,29 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         inicio.setVisible(true);
         this.dispose();
+        JOptionPane.showMessageDialog(null,"Vuelve a ingresar las horas");
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        hora1_S = txtHora_recib1_0.getText();
+        //hora2_S = txtHora_recib2_0.getText(); 
+        int hora1 = Integer.parseInt(hora1_S);
+        //int hora2 = Integer.parseInt(hora2_S);
+        try{
+            DefaultCategoryDataset ds = new DefaultCategoryDataset();            
+            for(int i=0; i<rango; i++){
+                ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
+            }    
+            JFreeChart jf = ChartFactory.createBarChart("Horas-Lluvia", "Horas", "Precipitación", ds, PlotOrientation.VERTICAL, true, true, true);
+            ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
+            f.setSize(1000, 600);
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        }catch(Exception e){
+            
+        }
+        //System.out.println("Rango en graficos: " + rango);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1005,6 +1051,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
