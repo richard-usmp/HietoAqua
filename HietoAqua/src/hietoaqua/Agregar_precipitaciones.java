@@ -5,6 +5,11 @@
  */
 package hietoaqua;
 
+import com.orsonpdf.PDFDocument;
+import com.orsonpdf.PDFGraphics2D;
+import com.orsonpdf.Page;
+import java.awt.Rectangle;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -26,6 +31,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
      */
     public Agregar_precipitaciones() {
         initComponents();
+        this.setLocationRelativeTo(null);
         txtHora_recib1.setVisible(false);
         txtHora_recib2.setVisible(false); 
         txtHora_recib1_0.setVisible(false);
@@ -66,6 +72,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        txtHoras.setEditable(false);
         txtHoras.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
 
         jLabel1.setText("--→");
@@ -292,7 +299,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(224, Short.MAX_VALUE))
         );
 
         pack();
@@ -347,6 +354,10 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
             DefaultTableModel tblPre = (DefaultTableModel)tblAcumulado.getModel();
             DefaultTableModel tblPre2 = (DefaultTableModel)tbl_maximos.getModel();
+            tblPre.setRowCount(0);
+            tblPre2.setRowCount(0);
+            tblPre.setColumnCount(0);
+            tblPre2.setColumnCount(0);
             DecimalFormat df = new DecimalFormat("0.00");
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
             double profundidad_maxima2 = Math.round(((listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1))*100)/100);
@@ -366,6 +377,7 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
                         Object row1[] = {df.format(listaPrecipitaciones.get(i))};
                         Object row2[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
+                        tblPre2.addColumn("");
                         tblPre2.addColumn("En 1 hora");
                         tblPre2.addColumn("En 2 horas");
                         if(listaPrecipitaciones.get(i)>profundidad_maxima1){
@@ -1001,7 +1013,15 @@ public class Agregar_precipitaciones extends javax.swing.JFrame {
             for(int i=0; i<rango; i++){
                 ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
             }    
-            JFreeChart jf = ChartFactory.createBarChart("Horas-Lluvia", "Horas", "Precipitación", ds, PlotOrientation.VERTICAL, true, true, true);
+            JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Horas", "Precipitación", ds, PlotOrientation.VERTICAL, true, true, true);
+            
+            PDFDocument pdfDoc = new PDFDocument();
+            pdfDoc.setTitle("Hietograma ");
+            Page page = pdfDoc.createPage(new Rectangle(612, 468));
+            PDFGraphics2D g2 = page.getGraphics2D();
+            jf.draw(g2, new Rectangle(0, 0, 612, 468));
+            pdfDoc.writeToFile(new File("D:\\"+hora1+".pdf"));
+            
             ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
             f.setSize(1000, 600);
             f.setLocationRelativeTo(null);
