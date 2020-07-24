@@ -35,11 +35,10 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         txtHora_recib1.setVisible(false);
         txtHora_recib2.setVisible(false); 
         txtHora_recib1_0.setVisible(false);
-        txtHora_recib2_0.setVisible(false);       
+        txtHora_recib2_0.setVisible(false);         
     }
     Inicio inicio = new Inicio();
     funciones f = new funciones();
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,6 +89,11 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
             }
         });
 
@@ -346,7 +350,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             }
             txtHora_recib1.setText(hora1 + "");
             txtMed_Precipi.setText(""); 
-        }
+        }      
         //System.out.print(hora1 +"////"+hora2);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -369,6 +373,9 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             tblPre.setColumnCount(0);
             tblPre2.setColumnCount(0);
             DecimalFormat df = new DecimalFormat("0.00");
+            
+            double precipitación_Acumulada = listaPrecipitaciones.get(0);
+            
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
             double profundidad_maxima2 = Math.round(((listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1))*100)/100);
             double profundidad_maxima3 = 0;
@@ -382,10 +389,12 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             for(int i=0;i<rango-1;i++){
                 switch (i) {
                     case 0:
+                        tblPre.addColumn("Precipitación\n" + " acumulada");
                         tblPre.addColumn("Total en 1 hora");
-                        tblPre.addColumn("Total en 2 horas");                       
-                        Object row1[] = {df.format(listaPrecipitaciones.get(i))};
-                        Object row2[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
+                        tblPre.addColumn("Total en 2 horas"); 
+                        Object row1[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i))};
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row2[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("");
                         tblPre2.addColumn("En 1 hora");
@@ -398,7 +407,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                         if(listaPrecipitaciones.get(i)+ listaPrecipitaciones.get(i+1)>profundidad_maxima2){
                             profundidad_maxima2 = listaPrecipitaciones.get(i)+ listaPrecipitaciones.get(i+1);
-                        }                       
+                        }    
                         
                         tblPre.addRow(row1);
                         tblPre.addRow(row2);                       
@@ -406,7 +415,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                     case 1:
                         profundidad_maxima3 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2);
                         tblPre.addColumn("Total en 3 horas");
-                        Object row3[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row3[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("En 3 horas");
@@ -423,7 +433,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row3);
                         break;
                     case 2:
-                        Object row4[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row4[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -439,7 +450,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row4);
                         break;
                     case 3:
-                        Object row5[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row5[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -455,10 +467,11 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row5);
                         break;
                     case 4:
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
                         profundidad_maxima4 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2) + listaPrecipitaciones.get(3)+ 
                                 listaPrecipitaciones.get(4)+ listaPrecipitaciones.get(5);
                         tblPre.addColumn("Total en 6 horas");
-                        Object row6[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        Object row6[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                     listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -483,7 +496,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         break;
                     case 5:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -508,7 +522,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 6:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -533,7 +548,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 7:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -558,7 +574,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 8:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -583,7 +600,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 9:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -608,7 +626,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 10:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -633,7 +652,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 11:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -658,7 +678,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 12:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -683,7 +704,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 13:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -708,7 +730,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 14:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -733,7 +756,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 15:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -758,7 +782,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 16:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -783,7 +808,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 17:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -808,7 +834,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 18:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -833,7 +860,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 19:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -858,7 +886,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 20:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -883,7 +912,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 21:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -908,7 +938,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 22:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -933,7 +964,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 23:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -958,7 +990,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         }
                     case 24:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada),df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -1014,34 +1047,43 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-    if(txt_Nom_Estacion.getText().equals("")){
-        JOptionPane.showMessageDialog(null,"Introduzca el nombre de la estación");
-    }else{
-        String nombre_esta = txt_Nom_Estacion.getText();
-        hora1_S = txtHora_recib1_0.getText();
-        int hora1 = Integer.parseInt(hora1_S);
-        try{
-            DefaultCategoryDataset ds = new DefaultCategoryDataset();            
-            for(int i=0; i<rango; i++){
-                ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
-            }    
-            JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Horas", "Precipitación", ds, PlotOrientation.VERTICAL, true, true, true);
-            
-            PDFDocument pdfDoc = new PDFDocument();
-            pdfDoc.setTitle("Hietograma");
-            Page page = pdfDoc.createPage(new Rectangle(612, 468));
-            PDFGraphics2D g2 = page.getGraphics2D();
-            jf.draw(g2, new Rectangle(0, 0, 612, 468));
-            pdfDoc.writeToFile(new File("D:\\"+nombre_esta+".pdf"));
-            
-            ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
-            f.setSize(1000, 600);
-            f.setLocationRelativeTo(null);
-            f.setVisible(true);
-        }catch(Exception e){
-            
+        String medidas="";
+        if(lblMed_Precipi_recibi.getText().equals("Pulgadas")){
+            medidas = "plg";
+        }else if(lblMed_Precipi_recibi.getText().equals("Milimetros")){
+            medidas = "mm";
+        }else if(lblMed_Precipi_recibi.getText().equals("Centimetros")){
+            medidas = "cm";
+        }else{
+            medidas = "xd";
         }
-    }
+        if(txt_Nom_Estacion.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Introduzca el nombre de la estación");
+        }else{
+            String nombre_esta = txt_Nom_Estacion.getText();
+            hora1_S = txtHora_recib1_0.getText();
+            int hora1 = Integer.parseInt(hora1_S);
+            try{
+                DefaultCategoryDataset ds = new DefaultCategoryDataset();            
+                for(int i=0; i<rango; i++){
+                    ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
+                }    
+                JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true);            
+                PDFDocument pdfDoc = new PDFDocument();
+                pdfDoc.setTitle("Hietograma");
+                Page page = pdfDoc.createPage(new Rectangle(612, 468));
+                PDFGraphics2D g2 = page.getGraphics2D();
+                jf.draw(g2, new Rectangle(0, 0, 612, 468));
+                pdfDoc.writeToFile(new File("D:\\"+nombre_esta+".pdf"));
+            
+                ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
+                f.setSize(1000, 600);
+                f.setLocationRelativeTo(null);
+                f.setVisible(true);
+            }catch(Exception e){
+            
+            }
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txtMed_PrecipiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMed_PrecipiKeyTyped
@@ -1053,6 +1095,9 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Solo numeros");
         }
     }//GEN-LAST:event_txtMed_PrecipiKeyTyped
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+    }//GEN-LAST:event_jButton1KeyPressed
 
     /**
      * @param args the command line arguments

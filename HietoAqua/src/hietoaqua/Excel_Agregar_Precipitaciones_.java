@@ -1046,6 +1046,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String medidas=lblMed_Precipi_recibi.getText();
         hora1_S = txtHora_recib1_0.getText();
         int hora1 = Integer.parseInt(hora1_S);
         try{
@@ -1053,7 +1054,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             for(int i=0; i<rango; i++){
                 ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
             }    
-            JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Horas", "Precipitacion", ds, PlotOrientation.VERTICAL, true, true, true);
+            JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true); 
             
             PDFDocument pdfDoc = new PDFDocument();
             pdfDoc.setTitle("Hietograma ");
@@ -1068,7 +1069,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             f.setVisible(true);
         }catch(Exception e){
             
-        }
+        }                     
         //System.out.println("Rango en graficos: " + rango);
     }//GEN-LAST:event_jButton4ActionPerformed
 
