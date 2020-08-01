@@ -38,7 +38,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
     JFileChooser SelectArchivo=new JFileChooser();
     File archivo;
     int contador=0;
-    String fecha_precipi, medida, horas_S;
+    String fecha_precipi/*PDF*/, medida, horas_S, nombre_esta/*PDF*/;
     int hora, maxima_hora=0, menor_hora=30;
     /**
      * Creates new form Agregar_precipitaciones
@@ -67,6 +67,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
         String mensaje="Error en la Importacion";
         DefaultTableModel modelo=new DefaultTableModel();
         tabla.setModel(modelo);
+        String fecha_temp = "a";
         
         try {
             //CREA ARCHIVO CON EXTENSION XLS Y XLSX
@@ -74,7 +75,6 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             Sheet hoja=book.getSheetAt(0);
             Iterator FilaIterator=hoja.rowIterator();
             int IndiceFila=-1;
-            
             //VA SER VERDADERO SI EXISTEN FILAS POR RECORRER
             while (FilaIterator.hasNext()) {                
                 //INDICE FILA AUMENTA 1 POR CADA RECORRIDO
@@ -89,7 +89,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 while (ColumnaIterator.hasNext()) {                    
                     //INDICE COLUMNA AUMENTA 1 POR CADA RECORRIDO
                     IndiceColumna++;
-                    Cell celda=(Cell)ColumnaIterator.next();
+                    Cell celda=(Cell)ColumnaIterator.next();                                       
                     
                     if(IndiceFila==0 && celda.getStringCellValue().equals("FECHA")){
                         modelo.addColumn(celda.getStringCellValue());
@@ -98,7 +98,14 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                             switch(celda.getCellType()){
                                 case Cell.CELL_TYPE_NUMERIC:
                                     ListaColumna[0] = sdf.format(celda.getDateCellValue());
+                                    fecha_temp = (String)ListaColumna[0];
                                     fecha_precipi = sdf.format(celda.getDateCellValue());
+                                    break;
+                                case Cell.CELL_TYPE_BLANK:
+                                    ListaColumna[0]=celda.getStringCellValue();
+                                    fecha_temp = (String)ListaColumna[0];
+                                default:
+                                    System.out.println("DEFAULT DE SWITCH Fecha");
                                     break;
                             }
                         }
@@ -111,54 +118,82 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                             Object[]ListaHoras=new Object[9999];                                               
                             switch(celda.getCellType()){
                                 case Cell.CELL_TYPE_NUMERIC:
-                                    ListaColumna[1]=sdfHorasss.format(celda.getDateCellValue());
-                                    ListaHoras[1] = sdfHora.format(celda.getDateCellValue());                                   
-                                    for(int i=0; i<20; i++){
-                                        horas_S = (String) ListaHoras[i];
-                                        if(horas_S != null){
-                                            hora = Integer.parseInt(horas_S);
-                                            if(hora>maxima_hora){
-                                                maxima_hora = hora;
-                                                System.out.println("maxima_hora: "+ maxima_hora);
-                                            }
-                                            if(hora<menor_hora){
-                                                System.out.println("llegaaaaaaaa");
-                                                menor_hora=hora;
-                                                System.out.println("menor_hora: "+ menor_hora);
-                                            }
-                                        }                                       
+                                    if(!fecha_temp.equals("")){
+                                        ListaColumna[1]=sdfHorasss.format(celda.getDateCellValue());                                  
+                                        ListaHoras[1] = sdfHora.format(celda.getDateCellValue());                                   
+                                        for(int i=0; i<20; i++){
+                                            horas_S = (String) ListaHoras[i];
+                                            if(horas_S != null){
+                                                hora = Integer.parseInt(horas_S);
+                                                if(hora>maxima_hora){
+                                                    maxima_hora = hora;
+                                                    System.out.println("maxima_hora: "+ maxima_hora);
+                                                }
+                                                if(hora<menor_hora){
+                                                    menor_hora=hora;
+                                                    System.out.println("menor_hora: "+ menor_hora);
+                                                }
+                                            }                                       
+                                        }
                                     }
+                                    break;
+                                default:
+                                    System.out.println("DEFAULT DE SWITCH hora");
                                     break;
                             }
                         }
                     }
                     
                     //SI INDICE FILA ES IGUAL A "0" Y LA CELDA CONTIENE LA PALABRA VALOR, ENTONCES SE AGREGA UNA COLUMNA
-                    if(IndiceFila==0 && celda.getStringCellValue().equals("VALOR")){
+                    if(IndiceFila==0 && celda.getStringCellValue().equals("VALOR DE PRECIPITACIÓN")){
                         modelo.addColumn(celda.getStringCellValue()); 
                     }else{
                         if(celda!=null && IndiceColumna==2){                                
                             switch (celda.getCellType()){
                                 case Cell.CELL_TYPE_NUMERIC:
-                                    listaPrecipitaciones.add(celda.getNumericCellValue());
-                                    ListaColumna[2]=celda.getNumericCellValue();
+                                    if(!fecha_temp.equals("")){
+                                        listaPrecipitaciones.add(celda.getNumericCellValue());
+                                        ListaColumna[2]=celda.getNumericCellValue();
+                                    }else{
+                                        System.out.println("hola como estas");
+                                    }                                 
                                     break;
                                 default:
-                                    System.out.println("DEFAULT DE SWITCH");
+                                    System.out.println("DEFAULT DE SWITCH Valor");
                                     break;
                             }  
                             //System.out.println("listaPrecipitaciones: "+listaPrecipitaciones);
                         }
-                    }    
+                    }  
                     
-                    if(IndiceFila==0 && celda.getStringCellValue().equals("UNIDADMEDIDA")){
+                    if(IndiceFila==0 && celda.getStringCellValue().equals("MEDIDA")){
                         modelo.addColumn(celda.getStringCellValue());
                     }else{
-                        if(celda!=null && IndiceColumna==3){
+                        if(IndiceColumna==3){
                             switch(celda.getCellType()){
                                 case Cell.CELL_TYPE_STRING:
-                                    ListaColumna[3]=celda.getStringCellValue();
-                                    medida = celda.getStringCellValue();
+                                    if(!fecha_temp.equals("")){
+                                        ListaColumna[3]=celda.getStringCellValue();                                   
+                                        medida = celda.getStringCellValue();
+                                    }
+                                    break;
+                                default:
+                                    System.out.println("DEFAULT DE SWITCH Medida");
+                                    break;
+                            }
+                        }
+                    }                   
+                    
+                    if(IndiceFila==0 && celda.getStringCellValue().equals("ESTACIÓN")){
+                        System.out.println("aver: "+ celda.getStringCellValue());
+                    }else{
+                        if(celda!=null && IndiceColumna==4){
+                            switch(celda.getCellType()){
+                                case Cell.CELL_TYPE_STRING:
+                                    nombre_esta = celda.getStringCellValue();
+                                    break;
+                                default:
+                                    System.out.println("DEFAULT DE SWITCH estación");
                                     break;
                             }
                         }
@@ -169,12 +204,12 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 if(IndiceFila!=0)modelo.addRow(ListaColumna);
             }
             mensaje="Importacion Exitosa";
-            
-            txtHora_recib2.setText(maxima_hora+"");
-            txtHora_recib2_0.setText(maxima_hora+"");
-            txtHora_recib1.setText(menor_hora+"");
-            txtHora_recib1_0.setText(menor_hora+"");
-
+            lblMed_Precipi_recibi.setText(medida);
+            txtHora_recib2.setText(""+maxima_hora);
+            txtHora_recib2_0.setText(""+maxima_hora);
+            txtHora_recib1.setText(""+menor_hora);
+            txtHora_recib1_0.setText(""+menor_hora);
+            System.out.println("listaPrecipitaciones_removido: " + listaPrecipitaciones);
         } catch (Exception e) {
             return e+"";
         }
@@ -409,7 +444,10 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             tblPre2.setRowCount(0);
             tblPre.setColumnCount(0);
             tblPre2.setColumnCount(0);
-            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormat df = new DecimalFormat("0.000");
+            System.out.println("listaPrecipitaciones: " +listaPrecipitaciones);
+            double precipitación_Acumulada = listaPrecipitaciones.get(0);
+            
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
             double profundidad_maxima2 = Math.round(((listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1))*100)/100);
             double profundidad_maxima3 = 0;
@@ -423,10 +461,12 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             for(int i=0;i<rango-1;i++){
                 switch (i) {
                     case 0:
+                        tblPre.addColumn("Precipitación\n" + " acumulada");
                         tblPre.addColumn("Total en 1 hora");
-                        tblPre.addColumn("Total en 2 horas");                       
-                        Object row1[] = {df.format(listaPrecipitaciones.get(i))};
-                        Object row2[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
+                        tblPre.addColumn("Total en 2 horas"); 
+                        Object row1[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i))};
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row2[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("");
                         tblPre2.addColumn("En 1 hora");
@@ -439,7 +479,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                         }
                         if(listaPrecipitaciones.get(i)+ listaPrecipitaciones.get(i+1)>profundidad_maxima2){
                             profundidad_maxima2 = listaPrecipitaciones.get(i)+ listaPrecipitaciones.get(i+1);
-                        }                       
+                        }    
                         
                         tblPre.addRow(row1);
                         tblPre.addRow(row2);                       
@@ -447,7 +487,8 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                     case 1:
                         profundidad_maxima3 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2);
                         tblPre.addColumn("Total en 3 horas");
-                        Object row3[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row3[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("En 3 horas");
@@ -464,7 +505,8 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                         tblPre.addRow(row3);
                         break;
                     case 2:
-                        Object row4[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row4[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -480,7 +522,8 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                         tblPre.addRow(row4);
                         break;
                     case 3:
-                        Object row5[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        Object row5[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -496,10 +539,11 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                         tblPre.addRow(row5);
                         break;
                     case 4:
+                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
                         profundidad_maxima4 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2) + listaPrecipitaciones.get(3)+ 
                                 listaPrecipitaciones.get(4)+ listaPrecipitaciones.get(5);
                         tblPre.addColumn("Total en 6 horas");
-                        Object row6[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        Object row6[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                     listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -521,10 +565,11 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                         }
                         
                         tblPre.addRow(row6);
-                        break;
-                    case 5:
+                        break;                   
+                    default:
                         {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                            Object row7[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -547,483 +592,6 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                             tblPre.addRow(row7);
                             break;
                         }
-                    case 6:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 7:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 8:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 9:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 10:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 11:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 12:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 13:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 14:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 15:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 16:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 17:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 18:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 19:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 20:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 21:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 22:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 23:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    case 24:
-                        {
-                            Object row7[] = {df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
-                                df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
-                                        listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
-                            
-                            if (listaPrecipitaciones.get(i + 1) > profundidad_maxima1) {
-                                profundidad_maxima1 = listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima2) {
-                                profundidad_maxima2 = listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima3) {
-                                profundidad_maxima3 = listaPrecipitaciones.get(i - 1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            if (listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                    + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1) > profundidad_maxima4) {
-                                profundidad_maxima4 = listaPrecipitaciones.get(i - 4) + listaPrecipitaciones.get(i - 3) + listaPrecipitaciones.get(i - 2) + listaPrecipitaciones.get(i - 1)
-                                        + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i + 1);
-                            }
-                            
-                            tblPre.addRow(row7);
-                            break;
-                        }
-                    default:System.out.print("¿Cómo llegaste aqui?");
-                        break;
                 }               
             }     
             double maximo_intensidad1 = profundidad_maxima1/1.0;
@@ -1043,6 +611,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try{
+            String ruta= System.getProperty("user.home");
             String medidas=lblMed_Precipi_recibi.getText();
             hora1_S = txtHora_recib1_0.getText();
             int hora1 = Integer.parseInt(hora1_S);
@@ -1053,11 +622,11 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true); 
             
             PDFDocument pdfDoc = new PDFDocument();
-            pdfDoc.setTitle("Hietograma ");
-            Page page = pdfDoc.createPage(new Rectangle(612, 468));
+            pdfDoc.setTitle("Hietograma");
+            Page page = pdfDoc.createPage(new Rectangle(800, 600));
             PDFGraphics2D g2 = page.getGraphics2D();
-            jf.draw(g2, new Rectangle(0, 0, 612, 468));
-            pdfDoc.writeToFile(new File("D:\\HietoAquaPDF.pdf"));
+            jf.draw(g2, new Rectangle(0, 0, 800, 600));
+            pdfDoc.writeToFile(new File(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
             
             ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
             f.setSize(1000, 600);
