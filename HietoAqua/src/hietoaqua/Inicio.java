@@ -158,10 +158,11 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbHoras1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
         Agregar_Precipitaciones ap = new Agregar_Precipitaciones();
         int horas1=cmbHoras1.getSelectedIndex()+1;
         int horas2=cmbHoras2.getSelectedIndex()+1;
+        String fecha = sdf.format(dateChoose.getDate());
         String medida = cmbMedida.getSelectedItem().toString();//pasar a cadena de caracteres
         if(horas1 >= horas2){
             JOptionPane.showMessageDialog(null, "Por favor, ponga las horas correctamente");       
@@ -174,6 +175,7 @@ public class Inicio extends javax.swing.JFrame {
             ap.txtHoras.setText(horas1_S+":00"); 
             ap.txtHora_recib2.setText(horas2_S);
             ap.txtHora_recib2_0.setText(horas2_S);
+            ap.txt_fecha.setText(fecha);
             //System.out.println(horas1 +" ///" +horas2);
             ap.setVisible(true);
             this.dispose();

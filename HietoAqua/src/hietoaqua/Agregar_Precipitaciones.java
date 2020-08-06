@@ -5,16 +5,31 @@
  */
 package hietoaqua;
 
-import com.orsonpdf.PDFDocument;
-import com.orsonpdf.PDFGraphics2D;
-import com.orsonpdf.Page;
-import java.awt.Rectangle;
-import java.io.File;
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.WebColors;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
@@ -24,9 +39,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class Agregar_Precipitaciones extends javax.swing.JFrame {
     ArrayList<Double> listaPrecipitaciones = new ArrayList<>();
+    ArrayList <Double> precipitación_Acumulada = new ArrayList<>();
     String hora1_S,hora2_S;
-    static int rango = 0;
-    
+    static int rango = 0;    
+    DefaultTableModel tblPre, tblPre2;
     /**
      * Creates new form Agregar_precipitaciones
      */
@@ -36,10 +52,12 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         txtHora_recib1.setVisible(false);
         txtHora_recib2.setVisible(false); 
         txtHora_recib1_0.setVisible(false);
-        txtHora_recib2_0.setVisible(false);         
+        txtHora_recib2_0.setVisible(false);        
+        txt_fecha.setVisible(false);
     }
     Inicio inicio = new Inicio();
     funciones f = new funciones();
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,6 +89,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txt_Nom_Estacion = new javax.swing.JTextField();
+        txt_fecha = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -201,7 +220,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         });
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Gráfico →");
+        jButton4.setText("Gráficos →");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -252,24 +271,24 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton3)
                                     .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(73, 73, 73)
+                                                .addGap(67, 67, 67)
                                                 .addComponent(jLabel5))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(103, 103, 103)
+                                                .addGap(97, 97, 97)
                                                 .addComponent(jButton2)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                            .addComponent(txt_fecha))))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -308,7 +327,9 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -375,8 +396,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_txtHora_recib1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-            DefaultTableModel tblPre = (DefaultTableModel)tblAcumulado.getModel();
-            DefaultTableModel tblPre2 = (DefaultTableModel)tbl_maximos.getModel();
+            tblPre = (DefaultTableModel)tblAcumulado.getModel();
+            tblPre2 = (DefaultTableModel)tbl_maximos.getModel();
             //TableColumnModel tblAcumulado_f = tblAcumulado.getColumnModel();
             tblPre.setRowCount(0);
             tblPre2.setRowCount(0);
@@ -384,7 +405,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             tblPre2.setColumnCount(0);
             DecimalFormat df = new DecimalFormat("0.000");
             
-            double precipitación_Acumulada = listaPrecipitaciones.get(0);
+            precipitación_Acumulada.add(listaPrecipitaciones.get(0));
             
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
             double profundidad_maxima2 = Math.round(((listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1))*100)/100);
@@ -399,12 +420,12 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             for(int i=0;i<rango-1;i++){
                 switch (i) {
                     case 0:
-                        tblPre.addColumn("Precipitación\n" + " acumulada");
+                        tblPre.addColumn("Precipitación\n" + "acumulada");
                         tblPre.addColumn("Total en 1 hora");
                         tblPre.addColumn("Total en 2 horas"); 
-                        Object row1[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i))};
-                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
-                        Object row2[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
+                        Object row1[] = {df.format(precipitación_Acumulada.get(i)), df.format(listaPrecipitaciones.get(i))};
+                        precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
+                        Object row2[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("");
                         tblPre2.addColumn("En 1 hora");
@@ -425,8 +446,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                     case 1:
                         profundidad_maxima3 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2);
                         tblPre.addColumn("Total en 3 horas");
-                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
-                        Object row3[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
+                        Object row3[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         tblPre2.addColumn("En 3 horas");
@@ -443,8 +464,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row3);
                         break;
                     case 2:
-                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
-                        Object row4[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
+                        Object row4[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -460,8 +481,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row4);
                         break;
                     case 3:
-                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
-                        Object row5[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
+                        Object row5[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
                         
                         if(listaPrecipitaciones.get(i+1)>profundidad_maxima1){
@@ -477,11 +498,11 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         tblPre.addRow(row5);
                         break;
                     case 4:
-                        precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
+                        precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
                         profundidad_maxima4 = listaPrecipitaciones.get(0) + listaPrecipitaciones.get(1) + listaPrecipitaciones.get(2) + listaPrecipitaciones.get(3)+ 
                                 listaPrecipitaciones.get(4)+ listaPrecipitaciones.get(5);
                         tblPre.addColumn("Total en 6 horas");
-                        Object row6[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                        Object row6[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                             df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                     listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -506,8 +527,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         break;                   
                     default:
                         {
-                            precipitación_Acumulada = precipitación_Acumulada + listaPrecipitaciones.get(i+1);
-                            Object row7[] = {df.format(precipitación_Acumulada), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
+                            precipitación_Acumulada.add((precipitación_Acumulada.get(i) + listaPrecipitaciones.get(i+1)));
+                            Object row7[] = {df.format(precipitación_Acumulada.get(i+1)), df.format(listaPrecipitaciones.get(i+1)), df.format(listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-1) + listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1)),
                                 df.format(listaPrecipitaciones.get(i-4) + listaPrecipitaciones.get(i-3) + listaPrecipitaciones.get(i-2) + listaPrecipitaciones.get(i-1) +
                                         listaPrecipitaciones.get(i) + listaPrecipitaciones.get(i+1))};
@@ -542,7 +563,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             tblPre2.addRow(rrooww2);
             /*for(int i = 0; i<tblAcumulado_f.getColumnCount(); i++){
                 tblAcumulado_f.getColumn(i).setPreferredWidth(5);
-            }*/    
+            }*/
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtHora_recib1_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHora_recib1_0ActionPerformed
@@ -564,12 +585,16 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int width = (int) PageSize.A4.getWidth();
+        int height = (int) (PageSize.A4.getHeight());
+        Rectangle pagesize = new Rectangle( width, height );
+        Document documento = new Document(pagesize, 50, 50, 50, 50);
         String medidas="";
         if(lblMed_Precipi_recibi.getText().equals("Pulgadas")){
             medidas = "plg";
-        }else if(lblMed_Precipi_recibi.getText().equals("Milimetros")){
+        }else if(lblMed_Precipi_recibi.getText().equals("Milímetros")){
             medidas = "mm";
-        }else if(lblMed_Precipi_recibi.getText().equals("Centimetros")){
+        }else if(lblMed_Precipi_recibi.getText().equals("Centímetros")){
             medidas = "cm";
         }else{
             medidas = "xd";
@@ -579,27 +604,114 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         }else{
             String nombre_esta = txt_Nom_Estacion.getText();
             hora1_S = txtHora_recib1_0.getText();
-            int hora1 = Integer.parseInt(hora1_S);
-            try{
+            int hora1 = Integer.parseInt(hora1_S);  
+            String fecha_escogida = txt_fecha.getText();
+            try{               
                 String ruta= System.getProperty("user.home");
                 DefaultCategoryDataset ds = new DefaultCategoryDataset();            
                 for(int i=0; i<rango; i++){
                     ds.addValue(listaPrecipitaciones.get(i), (hora1+i)+":00", "");
                 }    
-                JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true);   
-                PDFDocument pdfDoc = new PDFDocument();
-                pdfDoc.setTitle("Hietograma");
-                Page page = pdfDoc.createPage(new Rectangle(612, 468));
-                PDFGraphics2D g2 = page.getGraphics2D();
-                jf.draw(g2, new Rectangle(0, 0, 612, 468));
-                pdfDoc.writeToFile(new File(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
-            
+                JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true);  
+                
+                DefaultCategoryDataset ds2 = new DefaultCategoryDataset();            
+                for(int i=0; i<rango; i++){
+                    ds2.addValue(precipitación_Acumulada.get(i), (hora1+i)+":00", "");
+                }    
+                JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
+                /*-----------------PDF----------------------*/
+                PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
+                
+                Image logo = Image.getInstance("src/img/logo_hietoaqua.png");
+                logo.scaleToFit(90, 90);
+                logo.setAlignment(Chunk.ALIGN_LEFT);
+                
+                Paragraph parrafo = new Paragraph();
+                parrafo.setAlignment(Paragraph.ALIGN_CENTER);
+                parrafo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 18, Font.BOLD));
+                parrafo.add(" \n"+nombre_esta.toUpperCase()+" \n\n\n\n\n");   
+                
+                Paragraph subtitulo = new Paragraph();
+                subtitulo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 15));       
+                subtitulo.add("Acumulado por horas: \n\n\n\n\n");
+                
+                Paragraph fecha = new Paragraph();
+                fecha.setAlignment(Paragraph.ALIGN_RIGHT);
+                fecha.setFont(FontFactory.getFont("Tahoma", 17));
+                fecha.add("                                                  "+fecha_escogida);
+                
+                documento.open();
+                documento.add(fecha);
+                logo.setAbsolutePosition(10, 725);
+                documento.add(logo);
+                documento.add(parrafo); 
+                documento.add(subtitulo);
+                documento.addTitle("Hietograma_"+nombre_esta);
+                //una pagina
+                //tabla 1  
+                PdfPTable table = new PdfPTable(tblPre.getColumnCount());
+                int cols = tblPre.getColumnCount();
+                int fils = tblPre.getRowCount();
+                for(int j=0; j<cols; j++){
+                    BaseColor myColor = WebColors.getRGBColor("#0885b7");
+                    PdfPCell cell = new PdfPCell(new Phrase(tblPre.getColumnName(j)));
+                    cell.setBackgroundColor(myColor);
+                    table.addCell(cell);
+                }
+                for(int i=0; i<fils; i++) {
+                    for(int j=0; j<cols; j++){
+                        table.addCell((String) tblPre.getValueAt(i,j));
+                    }
+                }
+           
+                //tabla 2
+                PdfPTable table2 = new PdfPTable(tblPre2.getColumnCount());
+                int cols2 = tblPre2.getColumnCount();
+                int fils2 = tblPre2.getRowCount();
+                for(int j=0; j<cols2; j++){
+                    PdfPCell cell = new PdfPCell(new Phrase(" "));
+                    cell.setBackgroundColor(BaseColor.BLACK);
+                    table.addCell(cell);
+                }
+                for(int i=0; i<fils2; i++) {
+                    for(int j=0; j<cols2; j++){
+                        table.addCell((String) tblPre2.getValueAt(i,j));
+                    }
+                }
+                documento.add(table);  
+                documento.add(table2);
+                
+                //OTRA PAGINA
+                documento.newPage();
+                PdfContentByte cb = writer.getDirectContent();
+                PdfTemplate tp = cb.createTemplate( width, height );
+                Graphics2D g2 = tp.createGraphics( width, height, new DefaultFontMapper() );
+                Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, ((height/2)-1) );
+                jf.draw(g2, r2D);
+                g2.dispose();
+                cb.addTemplate(tp, 0, 0); 
+
+                PdfContentByte cb2 = writer.getDirectContent();
+                PdfTemplate tp2 = cb2.createTemplate( width, height );
+                Graphics2D g22 = tp2.createGraphics( width, height, new DefaultFontMapper() );
+                Rectangle2D r2D2 = new Rectangle2D.Double(0, 422, width, ((height/2)-1) );
+                jf2.draw(g22, r2D2);
+                g22.dispose();
+                cb.addTemplate(tp2, 0, 0); 
+                
+                documento.close();
+                /*-----------------FIN PDF----------------------*/
                 ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
                 f.setSize(1000, 600);
                 f.setLocationRelativeTo(null);
                 f.setVisible(true);
+                
+                ChartFrame f2 = new ChartFrame("Gráfico H-Acumulado", jf2);
+                f2.setSize(1000, 600);
+                f2.setLocationRelativeTo(f);
+                f2.setVisible(true);
             }catch(Exception e){
-            
+                JOptionPane.showMessageDialog(null,"error: " + e);
             }
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -678,5 +790,6 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     public javax.swing.JTextField txtHoras;
     private javax.swing.JTextField txtMed_Precipi;
     private javax.swing.JTextField txt_Nom_Estacion;
+    public static javax.swing.JTextField txt_fecha;
     // End of variables declaration//GEN-END:variables
 }
