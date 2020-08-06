@@ -15,6 +15,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.FontFactory;
@@ -90,6 +91,10 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txt_Nom_Estacion = new javax.swing.JTextField();
         txt_fecha = new javax.swing.JTextField();
+        txt_lati = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txt_longi = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -187,7 +192,6 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             }
         });
 
-        tbl_maximos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbl_maximos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -230,6 +234,12 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel6.setText("Nombre de la estación:");
 
+        jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel7.setText("Latitud:");
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel8.setText("Longitud:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,7 +248,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2))
@@ -249,6 +259,27 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtHora_recib1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton3)
+                                    .addComponent(jLabel6))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(31, 31, 31)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(30, 30, 30)
+                                                .addComponent(jButton2)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                            .addComponent(txt_fecha)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -264,36 +295,27 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lblMed_Precipi_recibi, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtHora_recib1_0, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton3)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtHora_recib2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButton1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                                        .addComponent(txtHora_recib1_0, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(67, 67, 67)
-                                                .addComponent(jLabel5))
+                                                .addComponent(jLabel8)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txt_longi, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(97, 97, 97)
-                                                .addComponent(jButton2)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtHora_recib2_0, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                                            .addComponent(txt_fecha))))))))
+                                                .addComponent(jLabel7)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txt_lati, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton4)
-                .addGap(56, 56, 56))
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,7 +329,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         .addComponent(txtHora_recib1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
@@ -334,13 +356,17 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txt_Nom_Estacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_lati, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_longi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)))))
@@ -420,7 +446,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             for(int i=0;i<rango-1;i++){
                 switch (i) {
                     case 0:
-                        tblPre.addColumn("Precipitación\n" + "acumulada");
+                        tblPre.addColumn("Precipitación\n" + " acumulada");
                         tblPre.addColumn("Total en 1 hora");
                         tblPre.addColumn("Total en 2 horas"); 
                         Object row1[] = {df.format(precipitación_Acumulada.get(i)), df.format(listaPrecipitaciones.get(i))};
@@ -590,6 +616,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
         Rectangle pagesize = new Rectangle( width, height );
         Document documento = new Document(pagesize, 50, 50, 50, 50);
         String medidas="";
+        String lati = txt_lati.getText();
+        String longi = txt_longi.getText();
         if(lblMed_Precipi_recibi.getText().equals("Pulgadas")){
             medidas = "plg";
         }else if(lblMed_Precipi_recibi.getText().equals("Milímetros")){
@@ -600,12 +628,16 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
             medidas = "xd";
         }
         if(txt_Nom_Estacion.getText().equals("")){
-            JOptionPane.showMessageDialog(null,"Introduzca el nombre de la estación");
+            JOptionPane.showMessageDialog(null,"Introduzca el nombre de la estación.");
+        }else if(txt_lati.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Introduzca la latitud.");
+        }else if(txt_longi.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Introduzca la longitud.");
         }else{
             String nombre_esta = txt_Nom_Estacion.getText();
             hora1_S = txtHora_recib1_0.getText();
             int hora1 = Integer.parseInt(hora1_S);  
-            String fecha_escogida = txt_fecha.getText();
+            String fecha_escogida = txt_fecha.getText();          
             try{               
                 String ruta= System.getProperty("user.home");
                 DefaultCategoryDataset ds = new DefaultCategoryDataset();            
@@ -621,28 +653,32 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
                 /*-----------------PDF----------------------*/
                 PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
+                BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                Font consolas = new Font(consolas_B);
+                Font font_nomColum = new Font(FontFactory.getFont(BaseFont.HELVETICA, 12));
                 
-                Image logo = Image.getInstance("src/img/logo_hietoaqua.png");
-                logo.scaleToFit(90, 90);
+                Image logo = Image.getInstance("https://i.ibb.co/SsB7NgC/logo-hietoaqua.png");
+                logo.scaleToFit(120, 120);
                 logo.setAlignment(Chunk.ALIGN_LEFT);
                 
                 Paragraph parrafo = new Paragraph();
                 parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-                parrafo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 18, Font.BOLD));
-                parrafo.add(" \n"+nombre_esta.toUpperCase()+" \n\n\n\n\n");   
+                parrafo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 20, Font.BOLD));
+                parrafo.add(" \n"+nombre_esta.toUpperCase()+"\n");   
+                parrafo.add(" \n"+"Latitud: "+lati.toUpperCase()+"  Longitud: "+longi.toUpperCase()+" \n\n\n\n\n");
                 
                 Paragraph subtitulo = new Paragraph();
-                subtitulo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 15));       
-                subtitulo.add("Acumulado por horas: \n\n\n\n\n");
+                subtitulo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 17));       
+                subtitulo.add("Acumulado por horas: \n\n\n\n");
                 
                 Paragraph fecha = new Paragraph();
                 fecha.setAlignment(Paragraph.ALIGN_RIGHT);
-                fecha.setFont(FontFactory.getFont("Tahoma", 17));
+                fecha.setFont(FontFactory.getFont(BaseFont.COURIER, 17));
                 fecha.add("                                                  "+fecha_escogida);
                 
                 documento.open();
                 documento.add(fecha);
-                logo.setAbsolutePosition(10, 725);
+                logo.setAbsolutePosition(25, 689);
                 documento.add(logo);
                 documento.add(parrafo); 
                 documento.add(subtitulo);
@@ -653,14 +689,17 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 int cols = tblPre.getColumnCount();
                 int fils = tblPre.getRowCount();
                 for(int j=0; j<cols; j++){
-                    BaseColor myColor = WebColors.getRGBColor("#0885b7");
-                    PdfPCell cell = new PdfPCell(new Phrase(tblPre.getColumnName(j)));
+                    BaseColor myColor = WebColors.getRGBColor("#38acd0");
+                    PdfPCell cell = new PdfPCell(new Phrase(tblPre.getColumnName(j), font_nomColum));  
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell.setBackgroundColor(myColor);
                     table.addCell(cell);
                 }
                 for(int i=0; i<fils; i++) {
                     for(int j=0; j<cols; j++){
-                        table.addCell((String) tblPre.getValueAt(i,j));
+                        PdfPCell cell = new PdfPCell(new Phrase((String) tblPre.getValueAt(i,j), consolas));
+                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        table.addCell(cell);
                     }
                 }
            
@@ -675,7 +714,9 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 }
                 for(int i=0; i<fils2; i++) {
                     for(int j=0; j<cols2; j++){
-                        table.addCell((String) tblPre2.getValueAt(i,j));
+                        PdfPCell cell = new PdfPCell(new Phrase((String) tblPre2.getValueAt(i,j), consolas));
+                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        table.addCell(cell);
                     }
                 }
                 documento.add(table);  
@@ -697,8 +738,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 Rectangle2D r2D2 = new Rectangle2D.Double(0, 422, width, ((height/2)-1) );
                 jf2.draw(g22, r2D2);
                 g22.dispose();
-                cb.addTemplate(tp2, 0, 0); 
-                
+                cb.addTemplate(tp2, 0, 0);
                 documento.close();
                 /*-----------------FIN PDF----------------------*/
                 ChartFrame f = new ChartFrame("Gráfico H-Lluvia", jf);
@@ -778,6 +818,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public static javax.swing.JLabel lblMed_Precipi_recibi;
@@ -791,5 +833,7 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
     private javax.swing.JTextField txtMed_Precipi;
     private javax.swing.JTextField txt_Nom_Estacion;
     public static javax.swing.JTextField txt_fecha;
+    private javax.swing.JTextField txt_lati;
+    private javax.swing.JTextField txt_longi;
     // End of variables declaration//GEN-END:variables
 }

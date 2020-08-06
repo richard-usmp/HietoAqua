@@ -9,6 +9,7 @@ import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
@@ -467,7 +468,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             tblPre.setColumnCount(0);
             tblPre2.setColumnCount(0);
             DecimalFormat df = new DecimalFormat("0.000");
-            
+
             precipitación_Acumulada.add(listaPrecipitaciones.get(0));
             
             double profundidad_maxima1 = listaPrecipitaciones.get(0);
@@ -483,7 +484,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             for(int i=0;i<rango-1;i++){
                 switch (i) {
                     case 0:
-                        tblPre.addColumn("Precipitación\n" + "acumulada");
+                        tblPre.addColumn("Precipitación\n" + " acumulada");
                         tblPre.addColumn("Total en 1 hora");
                         tblPre.addColumn("Total en 2 horas"); 
                         Object row1[] = {df.format(precipitación_Acumulada.get(i)), df.format(listaPrecipitaciones.get(i))};
@@ -654,28 +655,32 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
             /*-----------------PDF----------------------*/
                 PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
+                BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                Font consolas = new Font(consolas_B);
+                Font font_nomColum = new Font(FontFactory.getFont(BaseFont.HELVETICA, 12));
                 
-                Image logo = Image.getInstance("src/img/logo_hietoaqua.png");
-                logo.scaleToFit(90, 90);
+                Image logo = Image.getInstance("https://i.ibb.co/SsB7NgC/logo-hietoaqua.png");
+                logo.scaleToFit(120, 120);
                 logo.setAlignment(Chunk.ALIGN_LEFT);
                 
                 Paragraph parrafo = new Paragraph();
                 parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-                parrafo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 18, Font.BOLD));
-                parrafo.add(" \n"+nombre_esta.toUpperCase()+" \n\n\n\n\n");   
+                parrafo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 20, Font.BOLD));
+                parrafo.add(" \n"+nombre_esta.toUpperCase()+"\n\n\n\n\n");   
+                //parrafo.add(" \n"+"Latitud: "+lat+ "  Longitud: "+lon+" \n\n\n\n\n"); //latitud y longitud
                 
                 Paragraph subtitulo = new Paragraph();
-                subtitulo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 15));       
-                subtitulo.add("Acumulado por horas: \n\n\n\n\n");
+                subtitulo.setFont(FontFactory.getFont(BaseFont.HELVETICA, 17));       
+                subtitulo.add("Acumulado por horas: \n\n\n\n");
                 
                 Paragraph fecha = new Paragraph();
                 fecha.setAlignment(Paragraph.ALIGN_RIGHT);
-                fecha.setFont(FontFactory.getFont("Tahoma", 17));
+                fecha.setFont(FontFactory.getFont(BaseFont.COURIER, 17));
                 fecha.add("                                                  "+fecha_precipi);
                 
                 documento.open();
                 documento.add(fecha);
-                logo.setAbsolutePosition(10, 725);
+                logo.setAbsolutePosition(25, 689);
                 documento.add(logo);
                 documento.add(parrafo); 
                 documento.add(subtitulo);
@@ -686,14 +691,17 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 int cols = tblPre.getColumnCount();
                 int fils = tblPre.getRowCount();
                 for(int j=0; j<cols; j++){
-                    BaseColor myColor = WebColors.getRGBColor("#0885b7");
-                    PdfPCell cell = new PdfPCell(new Phrase(tblPre.getColumnName(j)));
+                    BaseColor myColor = WebColors.getRGBColor("#38acd0");
+                    PdfPCell cell = new PdfPCell(new Phrase(tblPre.getColumnName(j), font_nomColum));  
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     cell.setBackgroundColor(myColor);
                     table.addCell(cell);
                 }
                 for(int i=0; i<fils; i++) {
                     for(int j=0; j<cols; j++){
-                        table.addCell((String) tblPre.getValueAt(i,j));
+                        PdfPCell cell = new PdfPCell(new Phrase((String) tblPre.getValueAt(i,j), consolas));
+                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        table.addCell(cell);
                     }
                 }
            
@@ -708,7 +716,9 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 }
                 for(int i=0; i<fils2; i++) {
                     for(int j=0; j<cols2; j++){
-                        table.addCell((String) tblPre2.getValueAt(i,j));
+                        PdfPCell cell = new PdfPCell(new Phrase((String) tblPre2.getValueAt(i,j), consolas));
+                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        table.addCell(cell);
                     }
                 }
                 documento.add(table);  
@@ -744,7 +754,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             f2.setLocationRelativeTo(f);
             f2.setVisible(true);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"No se ha importado el archivo de Excel");
+            JOptionPane.showMessageDialog(null,"No se ha importado el archivo de Excel: " + e);
         }                     
         //System.out.println("Rango en graficos: " + rango);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -757,6 +767,9 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
         archivo=SelectArchivo.getSelectedFile();
         //ALT + 124 ||
         if(archivo.getName().endsWith("xls")||archivo.getName().endsWith("xlsx")){
+            tblPre2 = (DefaultTableModel)tbl_maximos.getModel();
+            tblPre2.setRowCount(0);
+            tblPre2.setColumnCount(0);
             JOptionPane.showMessageDialog(null, Importar(archivo,tblAcumulado));
         }else{
             JOptionPane.showMessageDialog(null, "Seleccionar formato Valido");
