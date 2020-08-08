@@ -24,9 +24,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import static hietoaqua.Agregar_Precipitaciones.rango;
-import static hietoaqua.Agregar_Precipitaciones.txtHora_recib1_0;
-import static hietoaqua.Agregar_Precipitaciones.txtHora_recib2_0;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -357,7 +354,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
         });
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Gráfico →");
+        jButton4.setText("Gráficos →");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -635,7 +632,7 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int width = (int) PageSize.A4.getWidth();
         int height = (int) (PageSize.A4.getHeight());
-        Rectangle pagesize = new com.itextpdf.text.Rectangle( width, height );
+        Rectangle pagesize = new Rectangle( width, height );
         Document documento = new Document(pagesize, 50, 50, 50, 50);
         try{
             String ruta= System.getProperty("user.home");
@@ -648,14 +645,15 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
             }    
             JFreeChart jf = ChartFactory.createBarChart("Hietograma-Lluvia", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds, PlotOrientation.VERTICAL, true, true, true); 
             
-                DefaultCategoryDataset ds2 = new DefaultCategoryDataset();            
-                for(int i=0; i<rango; i++){
-                    ds2.addValue(precipitación_Acumulada.get(i), (hora1+i)+":00", "");
-                }    
-                JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
+            DefaultCategoryDataset ds2 = new DefaultCategoryDataset();            
+            for(int i=0; i<rango; i++){
+                ds2.addValue(precipitación_Acumulada.get(i), (hora1+i)+":00", "");
+            }    
+            JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
             /*-----------------PDF----------------------*/
                 PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
-                BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                BaseFont consolas_B = BaseFont.createFont("..\\src\\fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                //BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true); 
                 Font consolas = new Font(consolas_B);
                 Font font_nomColum = new Font(FontFactory.getFont(BaseFont.HELVETICA, 12));
                 
@@ -712,13 +710,13 @@ public class Excel_Agregar_Precipitaciones_ extends javax.swing.JFrame {
                 for(int j=0; j<cols2; j++){
                     PdfPCell cell = new PdfPCell(new Phrase(" "));
                     cell.setBackgroundColor(BaseColor.BLACK);
-                    table.addCell(cell);
+                    table2.addCell(cell);
                 }
                 for(int i=0; i<fils2; i++) {
                     for(int j=0; j<cols2; j++){
                         PdfPCell cell = new PdfPCell(new Phrase((String) tblPre2.getValueAt(i,j), consolas));
                         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        table.addCell(cell);
+                        table2.addCell(cell);
                     }
                 }
                 documento.add(table);  

@@ -653,7 +653,8 @@ public class Agregar_Precipitaciones extends javax.swing.JFrame {
                 JFreeChart jf2 = ChartFactory.createBarChart("Hietograma-Acumulado", "Tiempo (hrs)", "Precipitación " +"("+ medidas+")", ds2, PlotOrientation.VERTICAL, true, true, true);
                 /*-----------------PDF----------------------*/
                 PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta+"\\Desktop"+"\\"+nombre_esta+".pdf"));
-                BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                BaseFont consolas_B = BaseFont.createFont("..\\src\\fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
+                //BaseFont consolas_B = BaseFont.createFont("fonts\\consolas\\CONSOLA.ttf", "Cp1252",  true);
                 Font consolas = new Font(consolas_B);
                 Font font_nomColum = new Font(FontFactory.getFont(BaseFont.HELVETICA, 12));
                 
